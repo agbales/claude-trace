@@ -18,31 +18,21 @@ export function matchesFilter(event: ToolCallEvent, filter: SessionFilter): bool
   }
 }
 
-// For the filtered debug view: each matching tool call, plus the assistant
-// text immediately preceding it (the "why" — what prompted the call), plus
-// its own result (already carried on the ToolCallEvent). Non-adjacent text,
-// thinking, and non-matching tool calls are left out.
+// For the filtered debug view: the assistant text immediately preceding the
+// first matching call (the "why"), then that call and everything from it
+// onward to the end of the turn — the call's own result plus whatever the
+// assistant did as a consequence (further tool calls, text, etc.). A skill
+// or tool call rarely stands alone; what it led to is the point of filtering
+// by it. Events before the first match that aren't its trigger are left out.
 export function selectFilteredEvents(events: NormEvent[], filter: SessionFilter): NormEvent[] {
   if (!filter) return events;
 
-  const includedUuids = new Set<string>();
-  const included: NormEvent[] = [];
+  const firstMatchIndex = events.findIndex((e) => e.kind === "tool_call" && matchesFilter(e, filter));
+  if (firstMatchIndex === -1) return [];
 
-  function include(e: NormEvent) {
-    if (includedUuids.has(e.uuid)) return;
-    includedUuids.add(e.uuid);
-    included.push(e);
-  }
-
-  events.forEach((e, i) => {
-    if (e.kind === "tool_call" && matchesFilter(e, filter)) {
-      const prev = events[i - 1];
-      if (prev && prev.kind === "text") include(prev);
-      include(e);
-    }
-  });
-
-  return included;
+  const trigger = events[firstMatchIndex - 1];
+  const rest = events.slice(firstMatchIndex);
+  return trigger && trigger.kind === "text" ? [trigger, ...rest] : rest;
 }
 
 export function filterLabel(filter: NonNullable<SessionFilter>): string {

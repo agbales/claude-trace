@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { ToolCallEvent } from "@/lib/claude-data/types";
 import { truncate } from "@/lib/claude-data/format";
 import { SubagentNode } from "./SubagentNode";
+import { SkillResult } from "./SkillResult";
 
 function summarizeInput(name: string, input: Record<string, unknown>): string {
   if (name === "Skill" && typeof input.skill === "string") return input.skill;
@@ -53,6 +54,8 @@ export function ToolCallNode({
 
           {event.name === "Agent" && event.subagent ? (
             <SubagentNode subagent={event.subagent} projectDir={projectDir} sessionId={sessionId} />
+          ) : event.name === "Skill" && event.result ? (
+            <SkillResult text={event.result.text} />
           ) : event.result ? (
             <p
               className={`whitespace-pre-wrap text-xs ${
