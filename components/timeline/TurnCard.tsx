@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { NormEvent, SystemEvent, Turn } from "@/lib/claude-data/types";
-import { selectFilteredEvents } from "@/lib/claude-data/filter";
+import { matchesFilter, selectFilteredEvents } from "@/lib/claude-data/filter";
 import { EventNode } from "./EventNode";
 import { SystemEventsGroup } from "./SystemEventsGroup";
 import { useSessionFilter } from "./SessionFilterContext";
@@ -84,7 +84,7 @@ export function TurnCard({
                 event={g.event}
                 projectDir={projectDir}
                 sessionId={sessionId}
-                forceOpen={isFiltering}
+                forceOpen={isFiltering && g.event.kind === "tool_call" && matchesFilter(g.event, filter)}
               />
             )
           )}
