@@ -4,10 +4,12 @@ import { TokenUsageBadge } from "./TokenUsageBadge";
 import { StatsPanel } from "./StatsPanel";
 import { SessionFilterProvider } from "./SessionFilterContext";
 import { ClearSelectionButton } from "./ClearSelectionButton";
+import { SessionVisitTracker } from "@/components/nav/SessionVisitTracker";
 
 export function SessionTimeline({ session }: { session: Session }) {
   return (
     <SessionFilterProvider>
+      <SessionVisitTracker projectDir={session.projectDir} sessionId={session.id} />
       <div className="mx-auto max-w-3xl px-6 py-8">
         <header className="mb-2 flex items-start justify-between gap-4 border-b border-black/5 pb-4 dark:border-white/5">
           <div>
