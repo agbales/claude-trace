@@ -1,36 +1,21 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Claude Trace
 
-## Getting Started
+A local app for browsing your Claude Code conversation history — see every question you asked, and drill into exactly what happened answering it: which tools, skills, and agents got called, and what they returned.
 
-First, run the development server:
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). It reads directly from `~/.claude/projects/` on your machine — no setup or import step.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How it works
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Pick a project.** The dropdown in the top nav lists every project Claude Code has session history for.
+- **Browse conversations.** The left sidebar lists that project's conversations, newest first. Switch projects and back and you'll land back on the conversation you were last looking at.
+- **Search by what was called.** The search box above the conversation list filters down to conversations that called a specific tool, skill, or agent by name.
+- **Scan questions, drill into answers.** Each conversation shows just the list of questions asked, collapsed by default. Click one to expand the full answer — text, tool calls, skill invocations, and agent/subagent calls, each individually expandable.
+- **See the stats.** Every conversation has a summary of how many tool calls, skills, MCP tools, agents, and errors it involved, broken down by name.
+- **Click a stat to filter.** Click any tool, skill, or agent name in the stats panel and the conversation filters down to just that: what triggered the call, the call itself, and everything that happened as a result — useful for debugging a specific skill or tool's behavior without wading through everything else. Clear the selection to go back to normal view.
