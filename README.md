@@ -2,6 +2,8 @@
 
 A local app for browsing your Claude Code conversation history — see every question you asked, and drill into exactly what happened answering it: which tools, skills, and agents got called, and what they returned.
 
+<img width="2986" height="1668" alt="screenshot-claude-trace" src="https://github.com/user-attachments/assets/94396fdd-0fc7-4d7c-ab2d-fa3489868ee7" />
+
 ## Getting started
 
 ```bash
