@@ -44,6 +44,9 @@ export function parseTranscriptLines(lines: string[], opts: ParseTranscriptOptio
   const turns: Turn[] = [];
   let currentTurn: Turn | null = null;
   const pendingToolCalls = new Map<string, ToolCallEvent>();
+  // Never deleted (unlike pendingToolCalls) — needed to attach isMeta content
+  // that can arrive after a call's tool_result already resolved it.
+  const toolCallsById = new Map<string, ToolCallEvent>();
   const tokenUsage: TokenUsageTotals = {
     inputTokens: 0,
     outputTokens: 0,
@@ -80,6 +83,26 @@ export function parseTranscriptLines(lines: string[], opts: ParseTranscriptOptio
     if (type === "user") {
       const content = raw.message?.content;
       const blocks = Array.isArray(content) ? content : null;
+
+      // Skill invocations resolve with a thin tool_result stub ("Launching
+      // skill: X") — the skill's actual loaded instructions arrive in a
+      // separate, immediately-following "user" line marked isMeta:true with
+      // sourceToolUseID pointing back at the Skill's own tool_use.id. That's
+      // the real "response" to show; attach it to the call instead of
+      // starting a fake turn out of what looks like plain user text.
+      if (raw.isMeta === true && typeof raw.sourceToolUseID === "string") {
+        const call = toolCallsById.get(raw.sourceToolUseID);
+        const metaText = flattenContentToText(content);
+        if (call && metaText) {
+          call.result = {
+            isError: call.result?.isError ?? false,
+            text: metaText,
+            raw: content ?? null,
+            toolSpecific: call.result?.toolSpecific ?? null,
+          };
+        }
+        continue;
+      }
 
       // Async-agent completion pings arrive as literal <task-notification>
       // text in a "user" line — not something a human typed. The subagent's
@@ -179,6 +202,7 @@ export function parseTranscriptLines(lines: string[], opts: ParseTranscriptOptio
           };
           turn.events.push(toolCall);
           pendingToolCalls.set(block.id, toolCall);
+          toolCallsById.set(block.id, toolCall);
 
           stats.totalToolCalls += 1;
           bump(stats.toolCounts, block.name);

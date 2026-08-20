@@ -12,6 +12,8 @@ export interface RawEnvelope {
   subtype?: string;
   content?: unknown;
   toolUseResult?: unknown;
+  isMeta?: boolean;
+  sourceToolUseID?: string;
   attachment?: { type?: string; [key: string]: unknown };
   message?: RawMessage;
   [key: string]: unknown;
