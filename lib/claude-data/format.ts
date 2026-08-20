@@ -14,6 +14,14 @@ export function truncate(text: string, max = 4000): string {
   return `${text.slice(0, max)}… (${text.length - max} more chars)`;
 }
 
+// Last N segments of an absolute path, for compact display (e.g. in a fixed-
+// width selector) — full path stays available via a `title` tooltip.
+export function shortenPath(path: string, segments = 2): string {
+  const parts = path.split("/").filter(Boolean);
+  if (parts.length <= segments) return path;
+  return `…/${parts.slice(-segments).join("/")}`;
+}
+
 export function relativeTime(iso: string | null): string {
   if (!iso) return "";
   const date = new Date(iso);
