@@ -1,5 +1,5 @@
 import type { Session } from "@/lib/claude-data/types";
-import { TurnCard } from "./TurnCard";
+import { TurnList } from "./TurnList";
 import { TokenUsageBadge } from "./TokenUsageBadge";
 
 export function SessionTimeline({ session }: { session: Session }) {
@@ -16,11 +16,7 @@ export function SessionTimeline({ session }: { session: Session }) {
       {session.turns.length === 0 ? (
         <p className="text-sm text-zinc-500">This conversation has no turns.</p>
       ) : (
-        <div className="space-y-8">
-          {session.turns.map((turn) => (
-            <TurnCard key={turn.id} turn={turn} projectDir={session.projectDir} sessionId={session.id} />
-          ))}
-        </div>
+        <TurnList turns={session.turns} projectDir={session.projectDir} sessionId={session.id} />
       )}
     </div>
   );

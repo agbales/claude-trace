@@ -54,7 +54,7 @@ export function SubagentNode({
           {error && <p className="text-xs text-red-500">{error}</p>}
           {data &&
             data.turns.map((turn) => (
-              <TurnCard key={turn.id} turn={turn} projectDir={projectDir} sessionId={sessionId} />
+              <TurnCard key={turn.id} turn={turn} projectDir={projectDir} sessionId={sessionId} defaultOpen />
             ))}
           {data && data.turns.length === 0 && (
             <p className="text-xs italic text-indigo-400">No turns recorded for this subagent.</p>
