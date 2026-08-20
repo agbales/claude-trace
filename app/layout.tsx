@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Claude Convo Viz",
+  title: "Claude Trace",
   description: "Browse Claude Code session transcripts — questions, tool calls, skills, and subagents.",
 };
 

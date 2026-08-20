@@ -18,7 +18,7 @@ export default async function ProjectLayout({
   return (
     <div className="flex h-screen flex-col">
       <header className="flex shrink-0 items-center justify-between border-b border-black/10 px-4 py-2 dark:border-white/10">
-        <span className="text-sm font-semibold text-zinc-800 dark:text-zinc-200">Claude Convo Viz</span>
+        <span className="text-sm font-semibold text-zinc-800 dark:text-zinc-200">Claude Trace</span>
         <ProjectSwitcher projects={projects} currentProjectDir={decodedProjectDir} />
       </header>
       <div className="flex flex-1 overflow-hidden">
