@@ -9,10 +9,12 @@ export function EventNode({
   event,
   projectDir,
   sessionId,
+  forceOpen = false,
 }: {
   event: NormEvent;
   projectDir: string;
   sessionId: string;
+  forceOpen?: boolean;
 }) {
   switch (event.kind) {
     case "text":
@@ -20,7 +22,9 @@ export function EventNode({
     case "thinking":
       return <ThinkingBlock event={event} />;
     case "tool_call":
-      return <ToolCallNode event={event} projectDir={projectDir} sessionId={sessionId} />;
+      return (
+        <ToolCallNode event={event} projectDir={projectDir} sessionId={sessionId} defaultOpen={forceOpen} />
+      );
     case "system":
       return <SystemChip event={event} />;
     case "unknown":

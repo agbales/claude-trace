@@ -20,18 +20,21 @@ export function ToolCallNode({
   event,
   projectDir,
   sessionId,
+  defaultOpen = false,
 }: {
   event: ToolCallEvent;
   projectDir: string;
   sessionId: string;
+  defaultOpen?: boolean;
 }) {
-  const [open, setOpen] = useState(false);
+  const [manualOpen, setManualOpen] = useState(false);
+  const open = manualOpen || defaultOpen;
   const summary = summarizeInput(event.name, event.input);
 
   return (
     <div className="rounded-md border border-zinc-200 dark:border-zinc-800">
       <button
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => setManualOpen((v) => !v)}
         className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm hover:bg-black/[.02] dark:hover:bg-white/[.03]"
       >
         <span className="text-zinc-400">{open ? "▾" : "▸"}</span>
