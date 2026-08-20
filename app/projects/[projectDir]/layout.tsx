@@ -1,0 +1,32 @@
+import type { ReactNode } from "react";
+import { listProjects, listSessions } from "@/lib/claude-data/discover";
+import { ProjectSwitcher } from "@/components/nav/ProjectSwitcher";
+import { SessionSidebar } from "@/components/nav/SessionSidebar";
+
+export default async function ProjectLayout({
+  children,
+  params,
+}: {
+  children: ReactNode;
+  params: Promise<{ projectDir: string }>;
+}) {
+  const { projectDir } = await params;
+  const decodedProjectDir = decodeURIComponent(projectDir);
+  const projects = listProjects();
+  const sessions = listSessions(decodedProjectDir);
+
+  return (
+    <div className="flex h-screen flex-col">
+      <header className="flex shrink-0 items-center justify-between border-b border-black/10 px-4 py-2 dark:border-white/10">
+        <span className="text-sm font-semibold text-zinc-800 dark:text-zinc-200">Claude Convo Viz</span>
+        <ProjectSwitcher projects={projects} currentProjectDir={decodedProjectDir} />
+      </header>
+      <div className="flex flex-1 overflow-hidden">
+        <aside className="w-72 shrink-0 overflow-y-auto border-r border-black/10 dark:border-white/10">
+          <SessionSidebar sessions={sessions} projectDir={decodedProjectDir} />
+        </aside>
+        <main className="flex-1 overflow-y-auto">{children}</main>
+      </div>
+    </div>
+  );
+}
