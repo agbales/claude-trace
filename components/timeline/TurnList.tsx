@@ -30,11 +30,17 @@ export function TurnList({
   return (
     <div>
       {!filter && (
-        <div className="mb-2 flex justify-end gap-3 text-xs text-zinc-500">
-          <button onClick={() => setAll(true)} className="hover:text-zinc-700 dark:hover:text-zinc-300">
+        <div className="mb-3 flex justify-end gap-2 text-xs text-zinc-500">
+          <button
+            onClick={() => setAll(true)}
+            className="rounded-full border border-black/10 px-2.5 py-1 hover:bg-black/[.04] dark:border-white/10 dark:hover:bg-white/[.06]"
+          >
             Expand all
           </button>
-          <button onClick={() => setAll(false)} className="hover:text-zinc-700 dark:hover:text-zinc-300">
+          <button
+            onClick={() => setAll(false)}
+            className="rounded-full border border-black/10 px-2.5 py-1 hover:bg-black/[.04] dark:border-white/10 dark:hover:bg-white/[.06]"
+          >
             Collapse all
           </button>
         </div>

@@ -28,13 +28,13 @@ export function SessionSidebar({ sessions, projectDir }: { sessions: SessionSumm
 
   return (
     <div className="flex h-full flex-col">
-      <div className="shrink-0 border-b border-black/5 p-2 dark:border-white/5">
+      <div className="shrink-0 p-2">
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search skills, tools, agents…"
-          className="w-full rounded-md border border-black/10 bg-white px-2 py-1.5 text-sm text-zinc-800 placeholder:text-zinc-400 focus:outline-none focus:ring-1 focus:ring-indigo-400 dark:border-white/10 dark:bg-zinc-900 dark:text-zinc-200"
+          className="w-full rounded-full border border-black/10 bg-white px-3.5 py-2 text-sm text-zinc-800 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-violet-400/50 dark:border-white/10 dark:bg-zinc-900/80 dark:text-zinc-200 dark:placeholder:text-zinc-500"
         />
       </div>
 
@@ -43,7 +43,7 @@ export function SessionSidebar({ sessions, projectDir }: { sessions: SessionSumm
       ) : results.length === 0 ? (
         <p className="p-4 text-sm text-zinc-500">No conversations called &quot;{query.trim()}&quot;.</p>
       ) : (
-        <nav className="flex-1 overflow-y-auto">
+        <nav className="flex-1 space-y-1 overflow-y-auto px-2 pb-2">
           {results.map(({ session: s, matchedName }) => {
             const href = `/projects/${encodeURIComponent(projectDir)}/${encodeURIComponent(s.id)}`;
             const isActive = pathname === href;
@@ -51,8 +51,10 @@ export function SessionSidebar({ sessions, projectDir }: { sessions: SessionSumm
               <Link
                 key={s.id}
                 href={href}
-                className={`flex flex-col gap-0.5 border-b border-black/5 px-3 py-2.5 text-sm hover:bg-black/[.03] dark:border-white/5 dark:hover:bg-white/[.04] ${
-                  isActive ? "bg-black/[.05] dark:bg-white/[.06]" : ""
+                className={`flex flex-col gap-0.5 rounded-xl border px-3 py-2.5 text-sm transition-colors ${
+                  isActive
+                    ? "border-violet-200 bg-violet-50 dark:border-violet-900/60 dark:bg-violet-950/30"
+                    : "border-transparent hover:bg-black/[.03] dark:hover:bg-white/[.04]"
                 }`}
               >
                 <span className="line-clamp-2 text-zinc-900 dark:text-zinc-100">
@@ -63,7 +65,7 @@ export function SessionSidebar({ sessions, projectDir }: { sessions: SessionSumm
                   {s.hasSubagents ? " · agents" : ""}
                 </span>
                 {matchedName && (
-                  <span className="mt-0.5 inline-block w-fit rounded-full bg-indigo-100 px-1.5 py-0.5 text-[10px] font-medium text-indigo-700 dark:bg-indigo-950/50 dark:text-indigo-300">
+                  <span className="mt-0.5 inline-block w-fit rounded-full bg-violet-100 px-1.5 py-0.5 text-[10px] font-medium text-violet-700 dark:bg-violet-950/50 dark:text-violet-300">
                     {matchedName}
                   </span>
                 )}

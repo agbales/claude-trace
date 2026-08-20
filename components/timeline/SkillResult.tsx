@@ -11,16 +11,16 @@ export function SkillResult({ text }: { text: string }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="rounded-md border border-dashed border-zinc-300 text-xs dark:border-zinc-700">
+    <div className="rounded-lg border border-dashed border-zinc-300 text-xs dark:border-zinc-700">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex w-full items-center gap-2 px-2 py-1 text-left text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+        className="flex w-full items-center gap-2 px-2.5 py-1.5 text-left text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
       >
         <span>{open ? "▾" : "▸"}</span>
         <span>Skill instructions ({text.length} chars)</span>
       </button>
       {open && (
-        <pre className="whitespace-pre-wrap px-2 pb-2 text-zinc-600 dark:text-zinc-400">
+        <pre className="whitespace-pre-wrap px-2.5 pb-2.5 text-zinc-600 dark:text-zinc-400">
           {truncate(text, 8000)}
         </pre>
       )}

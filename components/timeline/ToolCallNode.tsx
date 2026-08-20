@@ -33,10 +33,10 @@ export function ToolCallNode({
   const summary = summarizeInput(event.name, event.input);
 
   return (
-    <div className="rounded-md border border-zinc-200 dark:border-zinc-800">
+    <div className="overflow-hidden rounded-xl border border-zinc-200 dark:border-white/10 dark:bg-zinc-900/40">
       <button
         onClick={() => setManualOpen((v) => !v)}
-        className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm hover:bg-black/[.02] dark:hover:bg-white/[.03]"
+        className="flex w-full items-center gap-2 px-3.5 py-2 text-left text-sm hover:bg-black/[.02] dark:hover:bg-white/[.04]"
       >
         <span className="text-zinc-400">{open ? "▾" : "▸"}</span>
         <span className="font-medium text-zinc-700 dark:text-zinc-300">{event.name}</span>
@@ -45,9 +45,9 @@ export function ToolCallNode({
       </button>
 
       {open && (
-        <div className="space-y-2 border-t border-zinc-100 px-3 py-2 text-sm dark:border-zinc-900">
+        <div className="space-y-2 border-t border-zinc-100 px-3.5 py-2.5 text-sm dark:border-white/5">
           {Object.keys(event.input).length > 0 && (
-            <pre className="overflow-x-auto rounded bg-zinc-50 p-2 text-xs text-zinc-600 dark:bg-zinc-900 dark:text-zinc-400">
+            <pre className="overflow-x-auto rounded-lg bg-zinc-50 p-2.5 text-xs text-zinc-600 dark:bg-black/30 dark:text-zinc-400">
               {JSON.stringify(event.input, null, 2)}
             </pre>
           )}

@@ -38,9 +38,9 @@ function StatGroup({
             <li key={name}>
               <button
                 onClick={() => setFilter(active ? null : entryFilter)}
-                className={`flex w-full items-center justify-between gap-4 rounded px-1 py-0.5 text-left text-xs ${
+                className={`flex w-full items-center justify-between gap-4 rounded-lg px-1.5 py-1 text-left text-xs ${
                   active
-                    ? "bg-indigo-100 text-indigo-800 dark:bg-indigo-950/50 dark:text-indigo-300"
+                    ? "bg-violet-100 text-violet-800 dark:bg-violet-950/50 dark:text-violet-300"
                     : "text-zinc-600 hover:bg-black/[.04] dark:text-zinc-400 dark:hover:bg-white/[.06]"
                 }`}
               >
@@ -80,7 +80,7 @@ export function StatsPanel({ stats }: { stats: SessionStats }) {
         {effectiveOpen ? "▾" : "▸"} {summary}
       </button>
       {effectiveOpen && (
-        <div className="mt-2 grid grid-cols-2 gap-x-6 gap-y-3 rounded-md border border-zinc-200 p-3 dark:border-zinc-800">
+        <div className="mt-2 grid grid-cols-2 gap-x-6 gap-y-3 rounded-xl border border-zinc-200 p-3.5 dark:border-white/10 dark:bg-zinc-900/40">
           <StatGroup label="Tools" counts={stats.toolCounts} kind="toolName" />
           <StatGroup label="Skills" counts={stats.skillCounts} kind="skill" />
           <StatGroup label="MCP tools" counts={stats.mcpCounts} kind="toolName" />

@@ -41,23 +41,23 @@ export function SubagentNode({
   }
 
   return (
-    <div className="rounded-md border border-indigo-200 bg-indigo-50/40 dark:border-indigo-900 dark:bg-indigo-950/20">
-      <button onClick={handleToggle} className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm">
-        <span className="text-indigo-400">{open ? "▾" : "▸"}</span>
-        <span className="font-medium text-indigo-700 dark:text-indigo-300">{subagent.agentType}</span>
-        <span className="truncate text-indigo-500">{subagent.description}</span>
+    <div className="overflow-hidden rounded-xl border border-violet-200 bg-violet-50/40 dark:border-violet-900/60 dark:bg-violet-950/20">
+      <button onClick={handleToggle} className="flex w-full items-center gap-2 px-3.5 py-2 text-left text-sm">
+        <span className="text-violet-400">{open ? "▾" : "▸"}</span>
+        <span className="font-medium text-violet-700 dark:text-violet-300">{subagent.agentType}</span>
+        <span className="truncate text-violet-500">{subagent.description}</span>
       </button>
 
       {open && (
-        <div className="space-y-3 border-t border-indigo-100 px-3 py-2 dark:border-indigo-900">
-          {loading && <p className="text-xs text-indigo-400">Loading…</p>}
+        <div className="space-y-3 border-t border-violet-100 px-3.5 py-2.5 dark:border-violet-900/60">
+          {loading && <p className="text-xs text-violet-400">Loading…</p>}
           {error && <p className="text-xs text-red-500">{error}</p>}
           {data &&
             data.turns.map((turn) => (
               <TurnCard key={turn.id} turn={turn} projectDir={projectDir} sessionId={sessionId} defaultOpen />
             ))}
           {data && data.turns.length === 0 && (
-            <p className="text-xs italic text-indigo-400">No turns recorded for this subagent.</p>
+            <p className="text-xs italic text-violet-400">No turns recorded for this subagent.</p>
           )}
         </div>
       )}

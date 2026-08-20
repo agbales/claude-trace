@@ -65,7 +65,7 @@ export function TurnCard({
         <span className="mt-1 shrink-0 text-zinc-400">{effectiveOpen ? "▾" : "▸"}</span>
         <span className="min-w-0 flex-1">
           <span
-            className={`block font-medium text-zinc-900 dark:text-zinc-50 ${effectiveOpen ? "" : "line-clamp-3"}`}
+            className={`block text-base font-semibold text-zinc-900 dark:text-zinc-50 ${effectiveOpen ? "" : "line-clamp-3"}`}
           >
             {turn.question || "(no text)"}
           </span>
