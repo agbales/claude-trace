@@ -94,6 +94,7 @@ function summarizeSessionFile(filePath: string, sessionId: string, projectDir: s
   let startedAt: string | null = null;
   let firstUserMessage: string | null = null;
   let turnCount = 0;
+  const calledNames = new Set<string>();
 
   for (const line of content.split("\n")) {
     if (!line.trim()) continue;
@@ -119,6 +120,21 @@ function summarizeSessionFile(filePath: string, sessionId: string, projectDir: s
         }
       }
     }
+
+    if (raw.type === "assistant") {
+      const msgContent = raw.message?.content;
+      if (Array.isArray(msgContent)) {
+        for (const block of msgContent) {
+          if (block.type !== "tool_use" || typeof block.name !== "string") continue;
+          calledNames.add(block.name);
+          if (block.name === "Skill" && typeof block.input?.skill === "string") {
+            calledNames.add(block.input.skill);
+          } else if (block.name === "Agent" && typeof block.input?.subagent_type === "string") {
+            calledNames.add(block.input.subagent_type);
+          }
+        }
+      }
+    }
   }
 
   let hasSubagents = false;
@@ -129,7 +145,16 @@ function summarizeSessionFile(filePath: string, sessionId: string, projectDir: s
     hasSubagents = false;
   }
 
-  return { id: sessionId, projectDir, cwd, startedAt, firstUserMessage, turnCount, hasSubagents };
+  return {
+    id: sessionId,
+    projectDir,
+    cwd,
+    startedAt,
+    firstUserMessage,
+    turnCount,
+    hasSubagents,
+    calledNames: Array.from(calledNames),
+  };
 }
 
 function readFirstJsonLine(filePath: string): RawEnvelope | null {

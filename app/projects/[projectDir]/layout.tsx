@@ -22,7 +22,7 @@ export default async function ProjectLayout({
         <ProjectSwitcher projects={projects} currentProjectDir={decodedProjectDir} />
       </header>
       <div className="flex flex-1 overflow-hidden">
-        <aside className="w-72 shrink-0 overflow-y-auto border-r border-black/10 dark:border-white/10">
+        <aside className="w-72 shrink-0 overflow-hidden border-r border-black/10 dark:border-white/10">
           <SessionSidebar sessions={sessions} projectDir={decodedProjectDir} />
         </aside>
         <main className="flex-1 overflow-y-auto">{children}</main>

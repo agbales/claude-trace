@@ -67,6 +67,11 @@ export interface SessionSummary {
   firstUserMessage: string | null;
   turnCount: number;
   hasSubagents: boolean;
+  // Every tool name, skill name, and agent type called directly in this
+  // session's own transcript (not inside subagent transcripts — those are
+  // lazy-loaded and out of scope for this cheap per-session scan). Powers
+  // the sidebar search.
+  calledNames: string[];
 }
 
 export interface Session {
