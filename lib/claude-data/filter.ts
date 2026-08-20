@@ -1,4 +1,4 @@
-import type { ToolCallEvent } from "./types";
+import type { NormEvent, ToolCallEvent } from "./types";
 
 export type SessionFilter =
   | { kind: "toolName"; value: string }
@@ -16,6 +16,33 @@ export function matchesFilter(event: ToolCallEvent, filter: SessionFilter): bool
     case "agentType":
       return event.name === "Agent" && event.subagent?.agentType === filter.value;
   }
+}
+
+// For the filtered debug view: each matching tool call, plus the assistant
+// text immediately preceding it (the "why" — what prompted the call), plus
+// its own result (already carried on the ToolCallEvent). Non-adjacent text,
+// thinking, and non-matching tool calls are left out.
+export function selectFilteredEvents(events: NormEvent[], filter: SessionFilter): NormEvent[] {
+  if (!filter) return events;
+
+  const includedUuids = new Set<string>();
+  const included: NormEvent[] = [];
+
+  function include(e: NormEvent) {
+    if (includedUuids.has(e.uuid)) return;
+    includedUuids.add(e.uuid);
+    included.push(e);
+  }
+
+  events.forEach((e, i) => {
+    if (e.kind === "tool_call" && matchesFilter(e, filter)) {
+      const prev = events[i - 1];
+      if (prev && prev.kind === "text") include(prev);
+      include(e);
+    }
+  });
+
+  return included;
 }
 
 export function filterLabel(filter: NonNullable<SessionFilter>): string {
