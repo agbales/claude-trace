@@ -19,7 +19,7 @@ export function getSession(encodedProjectDir: string, sessionId: string): Sessio
   const lines = content.split("\n");
   const sessionDir = path.join(projectPath, sessionId);
   const subagentIndex = resolveSubagentIndex(sessionDir);
-  const { turns, tokenUsage } = parseTranscriptLines(lines, { subagentIndex });
+  const { turns, tokenUsage, stats } = parseTranscriptLines(lines, { subagentIndex });
 
   let cwd: string | null = null;
   let gitBranch: string | null = null;
@@ -36,7 +36,7 @@ export function getSession(encodedProjectDir: string, sessionId: string): Sessio
     if (cwd && gitBranch) break;
   }
 
-  return { id: sessionId, projectDir: encodedProjectDir, cwd, gitBranch, turns, tokenUsage };
+  return { id: sessionId, projectDir: encodedProjectDir, cwd, gitBranch, turns, tokenUsage, stats };
 }
 
 export function getSubagentTranscript(

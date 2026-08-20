@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto";
 import { flattenContentToText } from "./format";
-import type { RawEnvelope, SubagentRef, ToolCallEvent, TokenUsageTotals, Turn } from "./types";
+import type { RawEnvelope, SessionStats, SubagentRef, ToolCallEvent, TokenUsageTotals, Turn } from "./types";
 
 // Known session-bookkeeping line types that carry no user-facing content —
 // dropped silently rather than surfaced as unrecognized events. This build's
@@ -33,6 +33,11 @@ export interface ParseTranscriptOptions {
 export interface ParsedTranscript {
   turns: Turn[];
   tokenUsage: TokenUsageTotals;
+  stats: SessionStats;
+}
+
+function bump(counts: Record<string, number>, key: string): void {
+  counts[key] = (counts[key] ?? 0) + 1;
 }
 
 export function parseTranscriptLines(lines: string[], opts: ParseTranscriptOptions): ParsedTranscript {
@@ -45,6 +50,14 @@ export function parseTranscriptLines(lines: string[], opts: ParseTranscriptOptio
     cacheCreationTokens: 0,
     cacheReadTokens: 0,
     thinkingTokens: 0,
+  };
+  const stats: SessionStats = {
+    totalToolCalls: 0,
+    toolCounts: {},
+    skillCounts: {},
+    mcpCounts: {},
+    agentCounts: {},
+    errorCount: 0,
   };
 
   for (const line of lines) {
@@ -83,12 +96,14 @@ export function parseTranscriptLines(lines: string[], opts: ParseTranscriptOptio
           if (block.type === "tool_result" && typeof block.tool_use_id === "string") {
             const call = pendingToolCalls.get(block.tool_use_id);
             if (call) {
+              const isError = Boolean(block.is_error);
               call.result = {
-                isError: Boolean(block.is_error),
+                isError,
                 text: flattenContentToText(block.content),
                 raw: block.content ?? null,
                 toolSpecific: raw.toolUseResult ?? null,
               };
+              if (isError) stats.errorCount += 1;
               pendingToolCalls.delete(block.tool_use_id);
             }
           }
@@ -164,6 +179,16 @@ export function parseTranscriptLines(lines: string[], opts: ParseTranscriptOptio
           };
           turn.events.push(toolCall);
           pendingToolCalls.set(block.id, toolCall);
+
+          stats.totalToolCalls += 1;
+          bump(stats.toolCounts, block.name);
+          if (block.name === "Skill" && typeof block.input?.skill === "string") {
+            bump(stats.skillCounts, block.input.skill);
+          } else if (block.name === "Agent" && typeof block.input?.subagent_type === "string") {
+            bump(stats.agentCounts, block.input.subagent_type);
+          } else if (block.name.startsWith("mcp__")) {
+            bump(stats.mcpCounts, block.name);
+          }
         } else {
           turn.events.push({ kind: "unknown", uuid: eventUuid, timestamp, rawType: block.type, raw: block });
         }
@@ -198,5 +223,5 @@ export function parseTranscriptLines(lines: string[], opts: ParseTranscriptOptio
     }
   }
 
-  return { turns, tokenUsage };
+  return { turns, tokenUsage, stats };
 }

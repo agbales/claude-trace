@@ -76,6 +76,18 @@ export interface Session {
   gitBranch: string | null;
   turns: Turn[];
   tokenUsage: TokenUsageTotals;
+  stats: SessionStats;
+}
+
+// Counts keyed by name (tool name, skill name, subagent_type, mcp tool name).
+// Deliberately raw counts rather than pre-sorted — sort at render time.
+export interface SessionStats {
+  totalToolCalls: number;
+  toolCounts: Record<string, number>;
+  skillCounts: Record<string, number>;
+  mcpCounts: Record<string, number>;
+  agentCounts: Record<string, number>;
+  errorCount: number;
 }
 
 export interface Turn {
